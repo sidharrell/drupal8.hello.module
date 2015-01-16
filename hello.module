@@ -1,9 +1,0 @@
-<?php
-function hello_menu() {
-  return array (
-      'hello' => array (
-          'title' => 'Hello',
-          'route_name' => 'hello',
-      ),
-  );
-}
