@@ -24,6 +24,7 @@ class HelloBlock extends BlockBase {
    */
   public function build() {
 
+    // retrieve the configuration for this instance
     $config = $this->getConfiguration();
 
     if (isset($config['hello_block_settings']) && !empty($config['hello_block_settings'])) {
@@ -61,13 +62,18 @@ class HelloBlock extends BlockBase {
 
     $form = parent::blockForm($form, $form_state);
 
+    // When the module is activated, it will pull the contents of config/install/hello.settings.yml into
+    // the system configuration stored in the database
     $default_config = \Drupal::config('hello.settings');
+
+    // This will retrieve the configuration of this particular instance of a HelloBlock
     $config = $this->getConfiguration();
 
     $form['hello_block_settings'] = array (
         '#type' => 'textfield',
         '#title' => $this->t('Who'),
         '#description' => $this->t('Who do you want to say hello to?'),
+        // If there isn't a value set for this instance, it must be a new instance, so use the system config
         '#default_value' => isset($config['hello_block_settings']) ? $config['hello_block_settings'] : $default_config->get('hello.name')
     );
 
@@ -82,6 +88,7 @@ class HelloBlock extends BlockBase {
    */
   public function blockSubmit($form, FormStateInterface $form_state) {
 
+    // Place the value from the form submission into the configuration for this instance
     $this->setConfigurationValue('hello_block_settings', $form_state->getValue('hello_block_settings'));
 
   }
