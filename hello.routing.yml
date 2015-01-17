@@ -5,3 +5,10 @@ hello.content:
     _title: 'Hello World'
   requirements:
     _permission: 'access content'
+hello.form:
+  path: '/hello/form'
+  defaults:
+    _form: '\Drupal\hello\Form\HelloForm'
+    _title: 'Hello Form'
+  requirements:
+    _permission: 'access content'
