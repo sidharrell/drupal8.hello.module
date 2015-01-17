@@ -6,7 +6,6 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Session\AccountInterface;
-use Doctrine\Tests\Common\Annotations\True;
 
 /**
  * Provides a 'Hello' block.
@@ -16,7 +15,7 @@ use Doctrine\Tests\Common\Annotations\True;
  * admin_label = @Translation("Hello block"),
  * )
  */
-class HelloBlock extends BlockBase implements BlockPluginInterface {
+class HelloBlock extends BlockBase {
 
   /**
    *
@@ -24,6 +23,7 @@ class HelloBlock extends BlockBase implements BlockPluginInterface {
    *
    */
   public function build() {
+
     $config = $this->getConfiguration();
 
     if (isset($config['hello_block_settings']) && !empty($config['hello_block_settings'])) {
@@ -33,11 +33,12 @@ class HelloBlock extends BlockBase implements BlockPluginInterface {
       $name = $this->t('to no one');
     }
 
-    return array (
+    return array(
         '#markup' => $this->t('Hello @name!', array (
-            '@name' => $name
-        ))
+            '@name' => $name,
+         )),
     );
+
   }
 
   /**
@@ -46,7 +47,9 @@ class HelloBlock extends BlockBase implements BlockPluginInterface {
    *
    */
   public function blockAccess(AccountInterface $account) {
+
     return $account->hasPermission('access content');
+
   }
 
   /**
@@ -55,6 +58,7 @@ class HelloBlock extends BlockBase implements BlockPluginInterface {
    *
    */
   public function blockForm($form, FormStateInterface $form_state) {
+
     $form = parent::blockForm($form, $form_state);
 
     $config = $this->getConfiguration();
@@ -67,6 +71,7 @@ class HelloBlock extends BlockBase implements BlockPluginInterface {
     );
 
     return $form;
+
   }
 
   /**
@@ -75,6 +80,9 @@ class HelloBlock extends BlockBase implements BlockPluginInterface {
    *
    */
   public function blockSubmit($form, FormStateInterface $form_state) {
+
     $this->setConfigurationValue('hello_block_settings', $form_state->getValue('hello_block_settings'));
+
   }
+
 }
