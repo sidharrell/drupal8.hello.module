@@ -27,8 +27,8 @@ class HelloBlock extends BlockBase {
     // retrieve the configuration for this instance
     $config = $this->getConfiguration();
 
-    if (isset($config['hello_block_settings']) && !empty($config['hello_block_settings'])) {
-      $name = $config['hello_block_settings'];
+    if (isset($config['hello_block_name']) && !empty($config['hello_block_name'])) {
+      $name = $config['hello_block_name'];
     }
     else {
       $name = $this->t('to no one');
@@ -69,12 +69,16 @@ class HelloBlock extends BlockBase {
     // This will retrieve the configuration of this particular instance of a HelloBlock
     $config = $this->getConfiguration();
 
-    $form['hello_block_settings'] = array (
+    $form['hello_block_name'] = array(
         '#type' => 'textfield',
         '#title' => $this->t('Who'),
         '#description' => $this->t('Who do you want to say hello to?'),
         // If there isn't a value set for this instance, it must be a new instance, so use the system config
-        '#default_value' => isset($config['hello_block_settings']) ? $config['hello_block_settings'] : $default_config->get('hello.name')
+        '#default_value' => isset($config['hello_block_name']) ? $config['hello_block_name'] : $default_config->get('hello.name')
+    );
+    $form['hello_block_overwrite'] = array(
+        '#type' => 'checkbox',
+        '#title' => $this->t('Overwrite system default?'),
     );
 
     return $form;
@@ -89,7 +93,14 @@ class HelloBlock extends BlockBase {
   public function blockSubmit($form, FormStateInterface $form_state) {
 
     // Place the value from the form submission into the configuration for this instance
-    $this->setConfigurationValue('hello_block_settings', $form_state->getValue('hello_block_settings'));
+    $this->setConfigurationValue('hello_block_name', $form_state->getValue('hello_block_name'));
+
+    // If the checkbox on the form is checked, save the name to the system configuration for use by new instances
+    if ($form_state->getValue('hello_block_overwrite')) {
+      $config = \Drupal::config('hello.settings');
+      $config->set('hello.name', $form_state->getValue('hello_block_name'));
+      $config->save();
+    }
 
   }
 
