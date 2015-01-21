@@ -1,0 +1,4 @@
+hello.content:
+  title: 'Hello'
+  route_name: hello.content
+  base_route: hello.content

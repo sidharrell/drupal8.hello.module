@@ -1,3 +1,7 @@
 services:
   hello.hello_service:
     class: Drupal\hello\HelloService
+  hello.config_subscriber:
+    class: Drupal\hello\EventSubscriber\ConfigSubscriber
+    tags:
+      - { name: event_subscriber }
